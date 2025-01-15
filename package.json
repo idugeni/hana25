@@ -1,27 +1,41 @@
 {
-  "name": "hana-25",
+  "name": "hana25",
   "version": "0.1.0",
   "private": true,
+  "author": {
+    "name": "Eliyanto Sarage",
+    "email": "officialelsa21@gmail.com"
+  },
+  "license": "MIT",
+  "homepage": "https://hana25.vercel.app",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev --experimental-https --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "dotenv": "^16.4.7",
+    "next": "15.1.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.1.4"
+    "react-snowfall": "^2.2.0"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4.0.0-beta.9",
+    "@types/node": "^22.10.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
+    "daisyui": "^5.0.0-beta.1",
     "eslint": "^9",
     "eslint-config-next": "15.1.4",
-    "@eslint/eslintrc": "^3"
-  }
+    "postcss": "^8",
+    "react-icons": "^5.4.0",
+    "tailwindcss": "^4.0.0-beta.9",
+    "turbo": "^2.3.3",
+    "typescript": "^5"
+  },
+  "packageManager": "npm@11.0.0"
 }
