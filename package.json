@@ -16,11 +16,15 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@firebase/app": "^0.10.17",
+    "@google/generative-ai": "^0.21.0",
     "dotenv": "^16.4.7",
+    "firebase": "^11.1.0",
     "next": "15.1.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-snowfall": "^2.2.0"
+    "react-snowfall": "^2.2.0",
+    "sweetalert2": "^11.15.10"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

@@ -1,43 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Snowfall from "react-snowfall";
 
 export default function Home() {
-  const [isComplete, setIsComplete] = useState<boolean | null>(null);
-  const router = useRouter();
-
-  useEffect(() => {
-    const checkMaintenanceStatus = async () => {
-      try {
-        const res = await fetch("/api/maintenance/progress");
-        const data = await res.json();
-
-        if (data.progress === 100) {
-          setIsComplete(true);
-        } else {
-          setIsComplete(false);
-          router.push("/maintenance");
-        }
-      } catch (error) {
-        console.error("Failed to fetch maintenance status:", error);
-        setIsComplete(false);
-        router.push("/maintenance");
-      }
-    };
-
-    checkMaintenanceStatus();
-  }, [router]);
-
-  if (isComplete === null || !isComplete) {
-    return (
-      <div className="min-h-screen w-full bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 flex justify-center items-center">
-        <span className="loading loading-infinity loading-xl"></span>
-      </div>
-    );
-  }
-
   return (
     <div className="hero min-h-screen bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white relative">
       <Snowfall
@@ -60,9 +26,11 @@ export default function Home() {
             bagian terbaik dalam hidupku.
           </p>
 
-          <button className="btn btn-primary transition-all duration-500 ease-in-out">
-            🎁 Lihat Kejutan
-          </button>
+          <Link href="/moments">
+            <button className="btn btn-primary transition-all duration-500 ease-in-out">
+              🎁 Lihat Kejutan
+            </button>
+          </Link>
         </div>
       </div>
     </div>

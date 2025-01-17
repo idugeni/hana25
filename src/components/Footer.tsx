@@ -8,7 +8,8 @@ export default function Footer() {
       <div className="flex flex-col items-center gap-4 transition-all duration-500 ease-in-out">
         {/* Logo Section */}
         <div className="mb-2 transition-all duration-500 ease-in-out">
-          <Image src="/next.svg" alt="HANA25 Logo" width={64} height={64} className="w-16 h-auto" />
+          {/* Perbaikan: menambahkan width dan height dengan benar */}
+          <Image src="/next.svg" alt="HANA25 Logo" width={64} height={64} className="w-16 h-16" />
         </div>
 
         {/* Text Section */}

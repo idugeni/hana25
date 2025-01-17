@@ -32,7 +32,7 @@ export default function Navbar() {
             <label
               htmlFor="hana-drawer"
               aria-label="open sidebar"
-              className="btn btn-square btn-ghost hover:bg-transparent transition-all duration-300">
+              className="btn btn-ghost hover:bg-transparent outline-none border-none shadow-none transition-all duration-300">
               <FaBars size={24} className="text-white" />
             </label>
           </div>
@@ -51,10 +51,10 @@ export default function Navbar() {
                 <Link href="/">Home</Link>
               </li>
               <li>
-                <Link href="/about">About</Link>
+                <Link href="/moments">Moments</Link>
               </li>
               <li>
-                <Link href="/contact">Contact</Link>
+                <Link href="/quotes">Quotes</Link>
               </li>
             </ul>
           </div>
@@ -81,9 +81,9 @@ export default function Navbar() {
           </li>
           <li>
             <Link
-              href="/contact"
+              href="/quotes"
               className="w-full p-4 sm:p-6 md:p-8 text-center bg-purple-600 rounded-lg hover:bg-purple-700 transition-all duration-300 ease-in-out">
-              Contact
+              Quotes
             </Link>
           </li>
         </ul>

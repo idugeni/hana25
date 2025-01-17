@@ -43,10 +43,13 @@ body {
   cursor: url('https://cdn.custom-cursor.com/db/17942/32/minimal-gradient-red-heart-fire-cursor.png'), auto;
 }
 
+audio, canvas, embed, iframe, img, object, svg, video {
+  cursor: url('https://cdn.custom-cursor.com/db/17941/32/minimal-gradient-red-heart-fire-pointer.png'), auto;
+}
 button:hover {
   cursor: url('https://cdn.custom-cursor.com/db/17941/32/minimal-gradient-red-heart-fire-pointer.png'), auto;
 }
 
-label:hover, a:hover {
+label:hover, .radio, a:hover {
   cursor: url('https://cdn.custom-cursor.com/db/17942/32/minimal-gradient-red-heart-fire-cursor.png'), auto;
 }
