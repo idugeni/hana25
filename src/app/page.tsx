@@ -13,7 +13,6 @@ export default function Home() {
 
   return (
     <div className='hero min-h-screen bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white relative'>
-      {/* Efek Salju */}
       <Snowfall
         snowflakeCount={
           typeof window !== 'undefined' && window.innerWidth < 768 ? 75 : 150
@@ -26,7 +25,6 @@ export default function Home() {
       <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='hero-content text-center relative z-0'>
           <div className='max-w-5xl'>
-            {/* Animasi Judul Utama */}
             <motion.h1
               className='text-[clamp(2rem,5vw,4rem)] font-extrabold mb-6'
               initial={{ opacity: 0, scale: 0.8 }}
@@ -37,7 +35,6 @@ export default function Home() {
               <span className='text-blue-800'>Ulang Tahun!</span>
             </motion.h1>
 
-            {/* Animasi Sub-Judul dengan bayangan teks */}
             <motion.h2
               className='text-[clamp(1.5rem,3vw,2.5rem)] font-bold mb-4 sm:mb-6 md:mb-8 lg:mb-10 text-shadow-lg'
               initial={{ x: '-100vw' }}
@@ -49,7 +46,6 @@ export default function Home() {
               </span>
             </motion.h2>
 
-            {/* Animasi Deskripsi dengan efek Typewriter menggunakan framer-motion */}
             <motion.p
               className='text-base sm:text-lg md:text-xl lg:text-2xl mb-6'
               initial={{ opacity: 0 }}
@@ -72,11 +68,10 @@ export default function Home() {
               ))}
             </motion.p>
 
-            {/* Tombol Kejutan dengan animasi hover */}
-            <Link href='/moments'>
+            <Link href='/gift'>
               <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 className='btn btn-wide btn-primary btn-circle px-6 sm:px-10 transition-colors duration-300 ease-in-out hover:bg-purple-600 hover:text-white'
               >
                 <FaGifts className='mr-3 sm:mr-4 text-xl sm:text-2xl md:text-3xl transition-colors duration-300 ease-in-out' />
