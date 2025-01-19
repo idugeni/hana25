@@ -9,14 +9,29 @@ const AudioPlayer = () => {
 
   useEffect(() => {
     const audio = audioRef.current;
+
     if (audio) {
-      audio.play().catch(() => setIsPlaying(false));
+      const handlePlay = () => setIsPlaying(true);
+      const handlePause = () => setIsPlaying(false);
+      const handleError = () => console.error('Error loading audio file');
+      const handleOtherPlayers = () => {
+        document.querySelectorAll('audio').forEach((el) => {
+          if (el !== audio) el.pause();
+        });
+      };
+
+      audio.addEventListener('play', handlePlay);
+      audio.addEventListener('pause', handlePause);
+      audio.addEventListener('error', handleError);
+      audio.addEventListener('play', handleOtherPlayers);
+
+      return () => {
+        audio.removeEventListener('play', handlePlay);
+        audio.removeEventListener('pause', handlePause);
+        audio.removeEventListener('error', handleError);
+        audio.removeEventListener('play', handleOtherPlayers);
+      };
     }
-    return () => {
-      if (audio) {
-        audio.pause();
-      }
-    };
   }, []);
 
   const togglePlay = () => {
@@ -25,9 +40,8 @@ const AudioPlayer = () => {
       if (isPlaying) {
         audio.pause();
       } else {
-        audio.play().catch(() => console.warn('Interaksi pengguna diperlukan.'));
+        audio.play();
       }
-      setIsPlaying(!isPlaying);
     }
   };
 
@@ -35,21 +49,17 @@ const AudioPlayer = () => {
     <div>
       <button
         onClick={togglePlay}
-        className="fixed bottom-4 right-4 p-3 bg-gradient-to-r from-blue-600 to-teal-400 rounded-full text-white shadow-md focus:outline-none transition-all duration-300 ease-in-out"
+        aria-pressed={isPlaying}
         aria-label={isPlaying ? 'Pause music' : 'Play music'}
+        className='fixed bottom-4 right-4 p-3 bg-gradient-to-r from-blue-600 to-teal-400 rounded-full text-white shadow-md focus:outline-none transition-all duration-300 ease-in-out'
       >
-        {isPlaying ? (
-          <FaPause size={16} />
-        ) : (
-          <FaPlay size={16} />
-        )}
+        {isPlaying ? <FaPause size={16} /> : <FaPlay size={16} />}
       </button>
       <audio
         ref={audioRef}
         loop
-        autoPlay
-        src="/assets/media/Ed Sheeran - Photograph.mp3"
-        className="hidden"
+        src='/assets/media/Ed Sheeran - Photograph.mp3'
+        className='hidden'
       />
     </div>
   );
