@@ -40,37 +40,6 @@ Aplikasi ini juga menggunakan Genkit Firebase untuk mengelola data dan Gemini AI
 * **Animasi Interaktif:** Menyediakan animasi halus untuk meningkatkan pengalaman pengguna saat menjelajah kenangan.
 * **Quotes Dinamis:** Momen dapat dilengkapi dengan quotes yang dihasilkan oleh Gemini AI API, memberikan sentuhan pribadi pada setiap kenangan.
 
-## Dependencies
-
-```bash
-"@firebase/app": "^0.10.18",
-"firebase": "^11.2.0",
-"framer-motion": "^11.18.1",
-"next": "^15.1.5",
-"react": "^19.0.0",
-"react-dom": "^19.0.0",
-"react-icons": "^5.4.0",
-"react-snowfall": "^2.2.0",
-"sweetalert2": "^11.6.13"
-```
-
-## DevDependencies
-
-```bash
-"@eslint/eslintrc": "^3",
-"@tailwindcss/postcss": "^4.0.0-beta.9",
-"@types/node": "^22.10.7",
-"@types/react": "^19",
-"@types/react-dom": "^19",
-"daisyui": "^5.0.0-beta.1",
-"eslint": "^9",
-"eslint-config-next": "^15.1.5",
-"postcss": "^8.5.1",
-"tailwindcss": "^4.0.0-beta.9",
-"turbo": "^2.3.3",
-"typescript": "^5"
-```
-
 ## Instalasi
 
 Ikuti langkah-langkah berikut untuk menjalankan aplikasi HANA25 di mesin lokal Anda:
