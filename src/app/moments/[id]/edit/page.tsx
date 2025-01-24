@@ -1,53 +1,87 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db } from '@/firebase/firebaseConfig';
-import { collection, addDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import Swal from 'sweetalert2';
 import { useMetadata } from '@/utils/MetadataContext';
 import { motion } from 'framer-motion';
 
-export default function AddMoment() {
+export default function EditMoment({ momentId }: { momentId: string }) {
   useMetadata(
-    'Add Moment | Capture and Share Beautiful Memories',
-    'Add a new moment to the collection. Include a title, description, and an image or video to cherish forever.'
+    'Edit Moment | Update Your Memories',
+    'Edit an existing moment. Update the title, description, and media to reflect new memories.'
   );
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [mediaType, setMediaType] = useState<'image' | 'video'>('image');
   const [mediaId, setMediaId] = useState('');
-  const [orientation, setOrientation] = useState<'landscape' | 'portrait'>( 'landscape' );
+  const [orientation, setOrientation] = useState<'landscape' | 'portrait'>('landscape');
 
+  // Fetch moment data from Firestore when component loads
+  useEffect(() => {
+    const fetchMoment = async () => {
+      try {
+        const momentRef = doc(db, 'moments', momentId);
+        const momentSnap = await getDoc(momentRef);
+
+        if (momentSnap.exists()) {
+          const data = momentSnap.data();
+          setTitle(data.title || '');
+          setDescription(data.description || '');
+          setMediaType(data.mediaType || 'image');
+          setMediaId(data.mediaId || '');
+          setOrientation(data.orientation || 'landscape');
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: 'Moment not found.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching moment: ', error);
+        Swal.fire({
+          title: 'Error!',
+          text: 'Something went wrong while fetching the moment data.',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        });
+      }
+    };
+
+    fetchMoment();
+  }, [momentId]);
+
+  // Handle form submission to update the moment in Firestore
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      await addDoc(collection(db, 'moments'), {
+      const momentRef = doc(db, 'moments', momentId);
+      await updateDoc(momentRef, {
         title,
         description,
         mediaType,
         mediaId,
         orientation,
-        createdAt: new Date(),
+        updatedAt: new Date(),
       });
 
       Swal.fire({
         title: 'Success!',
-        text: 'Your moment has been added successfully!',
+        text: 'Your moment has been updated successfully!',
         icon: 'success',
         confirmButtonText: 'OK',
       });
-
-      setTitle('');
-      setDescription('');
-      setMediaId('');
     } catch (error) {
-      console.error('Error adding document: ', error);
+      console.error('Error updating document: ', error);
 
       Swal.fire({
         title: 'Error!',
-        text: 'Something went wrong while adding the moment.',
+        text: 'Something went wrong while updating the moment.',
         icon: 'error',
         confirmButtonText: 'OK',
       });
@@ -63,7 +97,7 @@ export default function AddMoment() {
         transition={{ duration: 0.6 }}
       >
         <h1 className='text-3xl font-semibold text-center text-gray-900 mb-8 sm:text-2xl md:text-3xl lg:text-4xl transition-all duration-300'>
-          Add a Moment
+          Edit a Moment
         </h1>
         <motion.form
           onSubmit={handleSubmit}
@@ -223,7 +257,7 @@ export default function AddMoment() {
               animate={{ opacity: 1 }}
               transition={{ delay: 1.4, duration: 0.4 }}
             >
-              Add Moment
+              Save Changes
             </motion.button>
           </div>
         </motion.form>
