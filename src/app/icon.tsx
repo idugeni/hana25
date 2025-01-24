@@ -1,4 +1,6 @@
-import { ImageResponse } from 'next/og';
+import { ImageResponse } from '@vercel/og';
+
+export const runtime = 'edge';
 
 export const size = {
   width: 32,
@@ -11,7 +13,7 @@ export default function Icon() {
     (
       <div
         style={{
-          fontSize: 24,
+          fontSize: '24px',
           background: 'linear-gradient(to right, #FF7F50, #FF6347)',
           width: '100%',
           height: '100%',
