@@ -1,4 +1,4 @@
-// src/app/moments/[id]/edit/page.tsx
+'use client';
 
 import { db } from '@/firebase/firebaseConfig'; 
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
