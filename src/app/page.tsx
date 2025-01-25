@@ -12,7 +12,7 @@ export default function Home() {
   const characters = message.split('');
 
   return (
-    <div className='hero min-h-screen bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white relative'>
+    <div className='hero min-h-screen bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 text-white relative flex items-center justify-center'>
       <Snowfall
         snowflakeCount={
           typeof window !== 'undefined' && window.innerWidth < 768 ? 75 : 150
