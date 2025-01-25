@@ -1,37 +1,46 @@
 'use client';
-
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { FaPlay, FaPause } from 'react-icons/fa6';
 import { motion } from 'framer-motion';
 
-const AudioPlayer = () => {
+const useAudioPlayer = (src: string) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [autoPlayFailed, setAutoPlayFailed] = useState(false);
   const [isPageLoaded, setIsPageLoaded] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  const togglePlay = useCallback(() => {
+    const audio = audioRef.current;
+    if (audio) {
+      isPlaying ? audio.pause() : audio.play();
+      setAutoPlayFailed(false);
+    }
+  }, [isPlaying]);
+
   useEffect(() => {
     setIsPageLoaded(true);
-
     const audio = audioRef.current;
-
+    
     if (audio) {
-      const handlePlay = () => setIsPlaying(true);
-      const handlePause = () => setIsPlaying(false);
-      const handleError = () => {
-        console.error('Error loading audio file');
-        setAutoPlayFailed(true);
+      const handleStateChange = () => {
+        setIsPlaying(!audio.paused);
       };
-      const handleOtherPlayers = () => {
+
+      const pauseOtherPlayers = () => {
         document.querySelectorAll('audio').forEach((el) => {
           if (el !== audio) el.pause();
         });
       };
 
-      audio.addEventListener('play', handlePlay);
-      audio.addEventListener('pause', handlePause);
+      const handleError = () => {
+        console.error('Error loading audio file');
+        setAutoPlayFailed(true);
+      };
+
+      audio.addEventListener('play', handleStateChange);
+      audio.addEventListener('pause', handleStateChange);
       audio.addEventListener('error', handleError);
-      audio.addEventListener('play', handleOtherPlayers);
+      audio.addEventListener('play', pauseOtherPlayers);
 
       const tryAutoPlay = async () => {
         try {
@@ -44,28 +53,25 @@ const AudioPlayer = () => {
       tryAutoPlay();
 
       return () => {
-        audio.removeEventListener('play', handlePlay);
-        audio.removeEventListener('pause', handlePause);
+        audio.removeEventListener('play', handleStateChange);
+        audio.removeEventListener('pause', handleStateChange);
         audio.removeEventListener('error', handleError);
-        audio.removeEventListener('play', handleOtherPlayers);
+        audio.removeEventListener('play', pauseOtherPlayers);
       };
     }
   }, []);
 
-  const togglePlay = () => {
-    const audio = audioRef.current;
-    if (audio) {
-      if (isPlaying) {
-        audio.pause();
-      } else {
-        audio.play();
-      }
-    }
+  return { audioRef, isPlaying, autoPlayFailed, isPageLoaded, togglePlay };
+};
 
-    if (autoPlayFailed) {
-      setAutoPlayFailed(false);
-    }
-  };
+const AudioPlayer = React.memo(() => {
+  const { 
+    audioRef, 
+    isPlaying, 
+    autoPlayFailed, 
+    isPageLoaded, 
+    togglePlay 
+  } = useAudioPlayer('/assets/media/Ed Sheeran - Photograph.mp3');
 
   return (
     <div className='relative'>
@@ -96,7 +102,7 @@ const AudioPlayer = () => {
           </span>
         </motion.div>
       )}
-
+      
       {isPageLoaded && (
         <motion.button
           onClick={togglePlay}
@@ -110,14 +116,16 @@ const AudioPlayer = () => {
           {isPlaying ? <FaPause size={16} /> : <FaPlay size={16} />}
         </motion.button>
       )}
+      
       <audio
         ref={audioRef}
+        preload="metadata"
         loop
         src='/assets/media/Ed Sheeran - Photograph.mp3'
         className='hidden'
       />
     </div>
   );
-};
+});
 
 export default AudioPlayer;
