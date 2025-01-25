@@ -61,16 +61,17 @@ const useAudioPlayer = (src: string) => {
     }
   }, []);
 
-  return { audioRef, isPlaying, autoPlayFailed, isPageLoaded, togglePlay };
+  return { audioRef, isPlaying, autoPlayFailed, isPageLoaded, togglePlay, src };
 };
 
-const AudioPlayer = React.memo(() => {
+const AudioPlayer: React.FC = React.memo(() => {
   const { 
     audioRef, 
     isPlaying, 
     autoPlayFailed, 
     isPageLoaded, 
-    togglePlay 
+    togglePlay,
+    src 
   } = useAudioPlayer('/assets/media/Ed Sheeran - Photograph.mp3');
 
   return (
@@ -121,11 +122,13 @@ const AudioPlayer = React.memo(() => {
         ref={audioRef}
         preload="metadata"
         loop
-        src='/assets/media/Ed Sheeran - Photograph.mp3'
+        src={src}
         className='hidden'
       />
     </div>
   );
 });
+
+AudioPlayer.displayName = 'AudioPlayer';
 
 export default AudioPlayer;
