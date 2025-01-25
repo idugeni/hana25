@@ -1,21 +1,17 @@
-'use client';
+// src/app/moments/[id]/edit/page.tsx
 
-import React, { useState, useEffect } from 'react';
-import { db } from '@/firebase/firebaseConfig';
+import { db } from '@/firebase/firebaseConfig'; 
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
-import { useMetadata } from '@/utils/MetadataContext';
 import { motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
+import { useMetadata } from '@/utils/MetadataContext';
 
-export default function EditMoment({ params }: { params: { id: string } }) {
+export default async function Page(props: {
+  params: Promise<{ id: string }>;
+}) {
+  const params = await props.params;
   const { id } = params;
-  const router = useRouter();
-
-  useMetadata(
-    'Edit Moment | Update Your Beautiful Memory',
-    'Edit the details of your moment, including title, description, and media.'
-  );
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -23,8 +19,15 @@ export default function EditMoment({ params }: { params: { id: string } }) {
   const [mediaId, setMediaId] = useState('');
   const [orientation, setOrientation] = useState<'landscape' | 'portrait'>('landscape');
 
+  // Generate metadata dynamically based on the ID
+  useMetadata(
+    `Edit Moment | Update your memory with the ID ${id}`,
+    `Edit the moment with title "${title}" and make changes to your memory.`
+  );
+
+  // Get data based on the ID to pre-fill the form
   useEffect(() => {
-    const fetchMomentData = async () => {
+    const getMomentData = async () => {
       try {
         const docRef = doc(db, 'moments', id);
         const docSnap = await getDoc(docRef);
@@ -36,13 +39,15 @@ export default function EditMoment({ params }: { params: { id: string } }) {
           setMediaType(data.mediaType);
           setMediaId(data.mediaId);
           setOrientation(data.orientation);
+        } else {
+          console.log('No such document!');
         }
       } catch (error) {
-        console.error('Error fetching moment:', error);
+        console.error('Error fetching moment data:', error);
       }
     };
 
-    fetchMomentData();
+    getMomentData();
   }, [id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -65,8 +70,6 @@ export default function EditMoment({ params }: { params: { id: string } }) {
         icon: 'success',
         confirmButtonText: 'OK',
       });
-
-      router.push(`/moments/${id}`);
     } catch (error) {
       console.error('Error updating document:', error);
 
@@ -248,7 +251,7 @@ export default function EditMoment({ params }: { params: { id: string } }) {
               animate={{ opacity: 1 }}
               transition={{ delay: 1.4, duration: 0.4 }}
             >
-              Update Moment
+              Save Changes
             </motion.button>
           </div>
         </motion.form>
