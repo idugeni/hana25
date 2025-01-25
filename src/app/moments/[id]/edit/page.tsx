@@ -2,58 +2,54 @@
 
 import React, { useState, useEffect } from 'react';
 import { db } from '@/firebase/firebaseConfig';
-import { collection, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import Swal from 'sweetalert2';
 import { useMetadata } from '@/utils/MetadataContext';
-import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
-export default function EditMoment() {
+export default function EditMoment({ params }: { params: { id: string } }) {
+  const { id } = params;
   const router = useRouter();
-  const { id } = router.query; // Menangkap parameter id dari URL
 
   useMetadata(
-    'Edit Moment | Capture and Edit Beautiful Memories',
-    'Edit the details of your moment. Change the title, description, or media.'
+    'Edit Moment | Update Your Beautiful Memory',
+    'Edit the details of your moment, including title, description, and media.'
   );
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [mediaType, setMediaType] = useState<'image' | 'video'>('image');
   const [mediaId, setMediaId] = useState('');
-  const [orientation, setOrientation] = useState<'landscape' | 'portrait'>(
-    'landscape'
-  );
-  const [loading, setLoading] = useState(true);
+  const [orientation, setOrientation] = useState<'landscape' | 'portrait'>('landscape');
 
   useEffect(() => {
-    if (id) {
-      const fetchMoment = async () => {
-        const docRef = doc(db, 'moments', id as string);
+    const fetchMomentData = async () => {
+      try {
+        const docRef = doc(db, 'moments', id);
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          const momentData = docSnap.data();
-          setTitle(momentData.title);
-          setDescription(momentData.description);
-          setMediaType(momentData.mediaType);
-          setMediaId(momentData.mediaId);
-          setOrientation(momentData.orientation);
+          const data = docSnap.data();
+          setTitle(data.title);
+          setDescription(data.description);
+          setMediaType(data.mediaType);
+          setMediaId(data.mediaId);
+          setOrientation(data.orientation);
         }
-        setLoading(false);
-      };
+      } catch (error) {
+        console.error('Error fetching moment:', error);
+      }
+    };
 
-      fetchMoment();
-    }
+    fetchMomentData();
   }, [id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!id) return;
-
     try {
-      const docRef = doc(db, 'moments', id as string);
+      const docRef = doc(db, 'moments', id);
       await updateDoc(docRef, {
         title,
         description,
@@ -72,7 +68,7 @@ export default function EditMoment() {
 
       router.push(`/moments/${id}`);
     } catch (error) {
-      console.error('Error updating document: ', error);
+      console.error('Error updating document:', error);
 
       Swal.fire({
         title: 'Error!',
@@ -82,10 +78,6 @@ export default function EditMoment() {
       });
     }
   };
-
-  if (loading) {
-    return <div>Loading...</div>; // Loading state
-  }
 
   return (
     <div className='min-h-screen bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 flex items-center justify-center px-6 py-16'>
